@@ -4,55 +4,59 @@
 
 int main()
 {
-  int n;
-  while (std::cin >> n)
-  {
-    int operation, x;
-    std::stack<int> stack;
-    std::queue<int> queue;
-    std::priority_queue<int> priority_queue;
-    bool canBeAStack = true, canBeAQueue = true, canBeAPQ = true;
-    for (int i = 0; i < n; ++i)
+    int n;
+    while (scanf("%d", &n) != EOF)
     {
-      std::cin >> operation >> x;
-      if (operation == 1)
-      {
-        if (canBeAStack)
-          stack.push(x);
-        if (canBeAQueue)
-          queue.push(x);
-        if (canBeAPQ)
-          priority_queue.push(x);
-      }
-      else if (operation == 2)
-      {
-        if (canBeAStack)
-          if (stack.top() == x and !stack.empty())
-            stack.pop();
+        int operation, x;
+        bool stack = true, queue = true, priority_queue = true;
+        std::stack<int> stack1;
+        std::queue<int> queue1;
+        std::priority_queue<int> priorityQueue;
+        for (int i = 0; i < n; ++i)
+        {
+            std::cin >> operation >> x;
+            if (operation == 1)
+            {
+                stack1.push(x);
+                queue1.push(x);
+                priorityQueue.push(x);
+            }
+            else if (operation == 2)
+            {
+                if (stack)
+                {
+                    if (!stack1.empty() && stack1.top() == x)
+                        stack1.pop();
+                    else
+                        stack = false;
+                }
+                if (queue)
+                {
+                    if (!queue1.empty() && queue1.front() == x)
+                        queue1.pop();
+                    else
+                        queue = false;
+                }
+                if (priority_queue)
+                {
+                    if (!priorityQueue.empty() && priorityQueue.top() == x)
+                        priorityQueue.pop();
+                    else
+                        priority_queue = false;
+                }
+            }
+        }
+
+        if (stack and !queue and !priority_queue)
+            std::cout << "stack" << std::endl;
+        else if (!stack and queue and !priority_queue)
+            std::cout << "queue" << std::endl;
+        else if (!stack and !queue and priority_queue)
+            std::cout << "priority queue" << std:: endl;
+        else if (!stack and !queue and !priority_queue)
+            std::cout << "impossible" << std::endl;
         else
-          canBeAStack = !canBeAStack;
-        if (canBeAQueue)
-          if (queue.front() == x and !queue.empty())
-            queue.pop();
-        else
-          canBeAQueue = !canBeAQueue;
-        if (canBeAPQ)
-          if (priority_queue.top() == x and !priority_queue.empty())
-            priority_queue.pop();
-        else
-          canBeAPQ = !canBeAPQ;
-      }
+            std::cout << "not sure" << std::endl;
     }
-    if (canBeAPQ and !canBeAStack and !canBeAQueue)
-      std::cout << "priority queue" << std::endl;
-    else if (!canBeAPQ and canBeAStack and !canBeAQueue)
-      std::cout << "stack" << std::endl;
-    else if (!canBeAPQ and !canBeAStack and canBeAQueue)
-      std::cout << "queue" << std::endl;
-    else if (!canBeAPQ and !canBeAStack and !canBeAQueue)
-      std::cout << "impossible" << std::endl;
-    else
-      std::cout << "not sure" << std::endl;
-  }
-  return 0;
+    return 0;
 }
